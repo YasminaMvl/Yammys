@@ -1,20 +1,17 @@
 const { Sequelize } = require('sequelize');
-const config = require('./config');
+
 require('dotenv').config();
 
 //connexion à la BDD
 
-const sequelize = new Sequelize(
-    config.db.database,
-    config.db.username,
-    config.db.password,
-    {
-        host: config.db.host,
-        port: config.db.port,
-        dialect: 'postgres',
-        logging: false,
+const sequelize = new Sequelize(process.env.PG_URL, {
+
+    define: {
+        // Transformer tous les noms des colonnes du camelCase vers snake_case
+        underscored: true,
     }
-);
+
+});
 
 // Test the database connection
 (async () => {
