@@ -3,12 +3,13 @@ require('dotenv').config();
 const app = express();
 const session = require('express-session');
 const moment = require('moment');
+const path = require('path');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.set('view engine', 'ejs');
-app.set('views', './app/views'); // Mettez à jour le chemin du dossier des vues
+app.set('views', path.join(__dirname, 'app/views')); // Mettez à jour le chemin du dossier des vues
 
 app.use(express.static(__dirname + '/static'));
 
@@ -35,7 +36,7 @@ const recipeRoutes = require('./app/routes/recipeRoutes');
 const userRoutes = require('./app/routes/userRoutes');
 
 app.get('/', (req, res) => {
-    res.render('index', { title: ' home page!' });
+    res.render('layout', { title: ' home page!' });
 });
 app.use('/auth', authRoutes);
 app.use('/recipes', recipeRoutes);
