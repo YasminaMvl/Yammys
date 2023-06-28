@@ -3,7 +3,10 @@ const Recipe = require('../models/Recipe');
 // Get all recipes
 async function getAllRecipes(req, res) {
   try {
-    const recipes = await Recipe.findAll();
+    const recipes = await Recipe.findAll({
+      include: ['user']
+      // Inclure la relation 'user' lors de la récupération des recettes
+    });
     res.json(recipes);
   } catch (error) {
     console.error('Error getting recipes:', error);
@@ -44,8 +47,30 @@ async function getRecipe(req, res) {
   }
 }
 
+// Delete a recipe by ID
+async function deleteRecipe(req, res) {
+  try {
+    const { id } = req.params;
+
+    // Find the recipe by ID
+    const recipe = await Recipe.findByPk(id);
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    // Delete the recipe
+    await recipe.destroy();
+
+    res.json({ message: 'Recipe deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
 module.exports = {
   getAllRecipes,
   createRecipe,
   getRecipe,
+  deleteRecipe,
 };
