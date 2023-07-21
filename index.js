@@ -10,7 +10,7 @@ app.use(express.json());
 
 // Configuration des vues EJS
 app.set('view engine', 'ejs');
-app.set('views', './app/static/views'); // Mettez à jour le chemin du dossier des vues
+app.set('views', './app/static/views'); //  chemin du dossier des vues
 
 // Middleware pour les fichiers statiques
 app.use(express.static(__dirname + '/static'));
@@ -44,7 +44,7 @@ const userRoutes = require('./app/routes/userRoutes');
 
 // Route d'accueil
 app.get('/', (req, res) => {
-    res.render('layout', { title: 'Home page!' });
+    res.render('home', { title: 'Home page!' });
 });
 
 // Utilisation des routes d'authentification, recettes et utilisateurs
