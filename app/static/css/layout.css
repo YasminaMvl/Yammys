@@ -1,21 +1,46 @@
-
-
 .navbar {
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
 }
 
 .navbar_list {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
-    margin: 0;
     display: flex;
-    align-items: center;
-    /* Aligner les éléments verticalement */
 }
 
-.navbar_logo {
-    margin-right: auto;
-    /* Déplacer le logo à droite en utilisant la marge automatique */
+.navbar_link {
+    margin: 0 10px;
+}
+
+.navbar_link a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.navbar_link a:hover {
+    text-decoration: underline;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 30px;
+}
+
+p {
+    text-align: center;
+}
+
+footer {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .logo_image {
@@ -23,61 +48,4 @@
     height: 50px;
 }
 
-.navbar_link {
-    margin-right: 10px;
-}
-
-.navbar_link a {
-    color: #333333;
-    text-decoration: none;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: #ffffff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-.navbar_link a:hover {
-    background-color: #f2f2f2;
-}
-
-main {
-    padding: 20px;
-}
-
-.recipe_image {
-    max-width: 100%;
-    height: auto;
-    margin-top: 20px;
-}
-
-footer {
-    background-color: #ffffff;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    text-align: center;
-    font-size: 14px;
-    color: #666666;
-}
-
-.slider {
-    width: 80%;
-    margin: 0 auto;
-}
-
-.slider-inner {
-    display: flex;
-    overflow: hidden;
-}
-
-.slide {
-    flex: 0 0 100%;
-    transition: transform 0.5s ease-in-out;
-}
-
-.slide img {
-    width: 100%;
-    height: auto;
-}
-
-/* CSS pour le slider */
+/* Add any additional styles or adjustments as needed */

@@ -1,10 +1,15 @@
+const User = require('../models/User');
 const Recipe = require('../models/Recipe');
+
+
+
+
 
 // Get all recipes
 async function getAllRecipes(req, res) {
   try {
     const recipes = await Recipe.findAll({
-      include: ['user']
+      include: [{ model: User, as: 'user' }],
       // Inclure la relation 'user' lors de la récupération des recettes
     });
     res.json(recipes);
@@ -35,7 +40,11 @@ async function getRecipe(req, res) {
     const { id } = req.params;
 
     // Find the recipe
-    const recipe = await Recipe.findByPk(id);
+    const recipe = await Recipe.findByPk(id, {
+      include: [{ model: User, as: 'user' }],
+      // Inclure la relation 'user' lors de la récupération de la recette
+    });
+
     if (!recipe) {
       return res.status(404).json({ message: 'Recipe not found' });
     }
@@ -45,6 +54,12 @@ async function getRecipe(req, res) {
     console.error('Error getting recipe:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
+}
+
+
+// Render the create recipe form
+function renderCreateForm(req, res) {
+  res.render('create', { title: 'Create Recipe' });
 }
 
 // Delete a recipe by ID
@@ -73,4 +88,5 @@ module.exports = {
   createRecipe,
   getRecipe,
   deleteRecipe,
+  renderCreateForm,
 };

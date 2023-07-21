@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const User = require('./User');
+
 
 const Recipe = sequelize.define('Recipe', {
     id: {
@@ -20,5 +22,7 @@ const Recipe = sequelize.define('Recipe', {
         allowNull: false,
     },
 });
+
+Recipe.belongsTo(User, { as: 'user', foreignKey: 'userId' });
 
 module.exports = Recipe;
