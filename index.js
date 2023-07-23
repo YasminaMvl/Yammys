@@ -13,7 +13,8 @@ app.set('view engine', 'ejs');
 app.set('views', './app/static/views'); //  chemin du dossier des vues
 
 // Middleware pour les fichiers statiques
-app.use(express.static(__dirname + '/static'));
+app.use(express.static(__dirname + '/app/static'));
+
 
 // Configuration de la session
 const config = require('./app/config/config');
