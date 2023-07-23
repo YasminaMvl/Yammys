@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
 
 // Get user by ID
 async function getUser(req, res) {
@@ -30,7 +31,11 @@ async function updateUser(req, res) {
         }
 
         user.username = username;
-        user.password = password;
+
+        // Hash the new password before saving it
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+
         await user.save();
 
         res.json({ message: 'User updated successfully', user });
