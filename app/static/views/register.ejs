@@ -1,4 +1,6 @@
-<%- include('layout') %>
+<%- include('partials/header') %>
+
+<link rel="stylesheet" href="../css/register.css">
 
 <h2>Register</h2>
 <form action="/auth/register" method="POST">
@@ -12,3 +14,5 @@
     </div>
     <button type="submit">Register</button>
 </form>
+
+<%- include('partials/footer') %>
