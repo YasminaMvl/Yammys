@@ -43,14 +43,12 @@ const authRoutes = require('./app/routes/authRoutes');
 const recipeRoutes = require('./app/routes/recipeRoutes');
 const userRoutes = require('./app/routes/userRoutes');
 
-// Route d'accueil
-app.get('/profile', (req, res) => {
-    if (!req.session.isLoggedIn) {
-        return res.redirect('/auth/login');
-    }
 
-    res.render('profile', { title: 'Mon profil', user: req.session.user, session: req.session });
+// Route d'accueil
+app.get('/', (req, res) => {
+    res.render('home', { title: 'Home page!', session: req.session }); //session qui renvoie la page Mon profile apres connexion
 });
+
 
 //session qui renvoie la page Mon profile apres connexion
 

@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="../css/recipe.css">
+
+<div class="recipe-card">
+    <img class="recipe-image" src="<%= recette.image %>" alt="<%= recette.titre %>">
+    <h2 class="recipe-title"><%= recette.titre %></h2>
+
+    <h3>Ingrédients :</h3>
+    <ul class="recipe-ingredients">
+        <% recette.ingredients.forEach(function(ingredient) { %>
+        <li><%= ingredient %></li>
+        <% }) %>
+    </ul>
+
+    <h3>Instructions :</h3>
+    <ol class="recipe-instructions">
+        <% recette.instructions.forEach(function(instruction) { %>
+        <li><%= instruction %></li>
+        <% }) %>
+    </ol>
+</div>
