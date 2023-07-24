@@ -22,10 +22,8 @@ async function registerUser(req, res) {
         const newUser = await User.create({ username, password: hashedPassword });
         console.log('New user:', newUser);
 
-        // Generate JWT token
-        const token = jwt.sign({ id: newUser.id }, config.secretKey);
-
-        res.status(201).json({ message: 'User registered successfully', token });
+        // Redirect to login page
+        res.redirect('/auth/login');
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -34,35 +32,42 @@ async function registerUser(req, res) {
 
 // Login user
 async function loginUser(req, res) {
+    console.log('Starting loginUser function');
     try {
         const { username, password } = req.body;
+        console.log(`Received username: ${username} and password: ${password}`);
 
         // Find the user
+        console.log('Attempting to find user in database');
         const user = await User.findOne({ where: { username } });
         console.log('User:', user);
         if (!user) {
+            console.log('User not found in database');
             return res.status(401).json({ message: 'Invalid username or password' });
         }
 
-
-
         // Compare passwords
+        console.log('User found, comparing passwords');
         const passwordMatch = await bcrypt.compare(password, user.password);
         console.log('Password match:', passwordMatch);
         if (!passwordMatch) {
+            console.log('Passwords do not match');
             return res.status(401).json({ message: 'Invalid username or password' });
         }
 
-        // Generate JWT token
-        const token = jwt.sign({ id: user.id }, config.secretKey);
+        // User is logged in, update session
+        console.log('Passwords match, updating session and redirecting to profile');
+        req.session.isLoggedIn = true;
+        req.session.user = user;
 
-        res.json({ message: 'User logged in successfully', token });
+        res.redirect('/users/profile');
     } catch (error) {
         console.error('Error logging in user:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-
 }
+
+
 
 // Update user
 async function updateUser(req, res) {
