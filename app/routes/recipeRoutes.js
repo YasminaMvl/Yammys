@@ -3,19 +3,13 @@ const router = express.Router();
 const recipeController = require('../controllers/recipeController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
+// Définir les routes pour les recettes
+router.get('/', recipeController.getAllRecipes); // Récupérer toutes les recettes
+router.post('/', authMiddleware.authenticateUser, recipeController.createRecipe); // Créer une nouvelle recette
+router.get('/:id', recipeController.getRecipe); // Récupérer une recette spécifique
+router.get('/create', recipeController.renderCreateForm); // Afficher le formulaire de création de recette
+router.post('/create', recipeController.createRecipe); // Créer une nouvelle recette
+router.delete('/:id', authMiddleware.authenticateUser, recipeController.deleteRecipe); // Supprimer une recette
 
-router.get('/', recipeController.getAllRecipes);
-router.post('/', authMiddleware.authenticateUser, recipeController.createRecipe);
-// Create a new recipe
-router.post('/recipes', recipeController.createRecipe);
-// Get a specific recipe
-router.get('/recipes/:id', recipeController.getRecipe);
-router.get('/:id', recipeController.getRecipe);
-//Create a recipe
-router.get('/create', recipeController.renderCreateForm);
-router.post('/create', recipeController.createRecipe);
-//  suppression de recette
-router.delete('/:id', authMiddleware.authenticateUser, recipeController.deleteRecipe);
-
-
+// Exporter le routeur
 module.exports = router;

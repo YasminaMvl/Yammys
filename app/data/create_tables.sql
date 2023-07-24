@@ -18,6 +18,7 @@ CREATE TABLE recipes (
   title VARCHAR(255) NOT NULL,
   ingredients TEXT NOT NULL,
   instructions TEXT NOT NULL,
+  image VARCHAR(255), -- Nouvelle colonne pour l'image
   user_id INTEGER REFERENCES users(id), 
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ
