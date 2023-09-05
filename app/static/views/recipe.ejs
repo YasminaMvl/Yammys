@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/recipe.css">
 
 <!-- Inclure le header -->
-<% include partials/header.ejs %>
+
 
 <!-- Afficher la recette -->
 <div class="recipe-card">
@@ -13,19 +13,18 @@
     <!-- Afficher les ingrédients de la recette -->
     <h3>Ingrédients :</h3>
     <ul class="recipe-ingredients">
-        <% recette.ingredients.forEach(function(ingredient) { %>
-        <li><%= ingredient %></li>
+        <% ingredientsArray.forEach(function(ingredient) { %>
+        <li><%= ingredient.trim() %></li>
         <% }) %>
     </ul>
 
     <!-- Afficher les instructions de la recette -->
     <h3>Instructions :</h3>
     <ol class="recipe-instructions">
-        <% recette.instructions.forEach(function(instruction) { %>
+        <% instructionsArray.forEach(function(instruction) { %>
         <li><%= instruction %></li>
         <% }) %>
     </ol>
-</div>
 
-<!-- Inclure le footer -->
-<% include partials/footer.ejs %>
+
+    <!-- Inclure le footer -->

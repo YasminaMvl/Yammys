@@ -3,10 +3,16 @@ const Recipe = require('../models/Recipe');
 
 
 // Récupérer une recette spécifique
+// Récupérer une recette spécifique
 async function getRecipe(req, res) {
   try {
     // Récupérer l'ID de la recette à partir de la requête
-    const { id } = req.params;
+    const id = parseInt(req.params.id);
+
+    // Vérifier si l'ID est un entier valide
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid recipe ID' });
+    }
 
     // Trouver la recette dans la base de données
     const recipe = await Recipe.findByPk(id, {
@@ -19,8 +25,14 @@ async function getRecipe(req, res) {
       return res.status(404).json({ message: 'Recipe not found' });
     }
 
-    // Render the 'recipe' view and pass the recipe to the view
-    res.render('recipe', { recette: recipe });
+    // Traiter les ingrédients en tant que texte brut et les diviser en un tableau
+    const ingredientsArray = recipe.ingredients.split(',');
+
+    // Traiter les instructions en tant que texte brut et les diviser en un tableau
+    const instructionsArray = recipe.instructions.split('\n');
+
+    // Render the 'recipe' view and pass the recipe, ingredientsArray, and instructionsArray to the view
+    res.render('recipe', { recette: recipe, ingredientsArray: ingredientsArray, instructionsArray: instructionsArray });
   } catch (error) {
     // En cas d'erreur, afficher l'erreur et envoyer une réponse d'erreur
     console.error('Error getting recipe:', error);
@@ -28,13 +40,18 @@ async function getRecipe(req, res) {
   }
 }
 
+
+
+
+
+
 // Récupérer toutes les recettes
 async function getAllRecipes(req, res) {
   try {
     const recipes = await Recipe.findAll({
       include: [{ model: User, as: 'user' }],
     });
-    res.render('recipes', { recettes: recipes });
+    res.render('recipes', { recipes: recipes });
   } catch (error) {
     console.error('Error getting recipes:', error);
     res.status(500).render('500', { message: 'Internal server error' });

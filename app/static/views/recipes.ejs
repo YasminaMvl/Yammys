@@ -1,8 +1,10 @@
 <link rel="stylesheet" href="/css/recipes.css">
 
-<% include partials/header.ejs %>
+
+
+
 <div class="recipes-grid">
-    <% recettes.forEach(function(recipe) { %>
+    <% recipes.forEach(function(recipe) { %>
     <div class="recipe-card">
         <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
         <h2 class="recipe-title"><%= recipe.title %></h2>
@@ -10,4 +12,3 @@
     </div>
     <% }) %>
 </div>
-<% include partials/footer.ejs %>
