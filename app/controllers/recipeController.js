@@ -31,18 +31,13 @@ async function getRecipe(req, res) {
 // Récupérer toutes les recettes
 async function getAllRecipes(req, res) {
   try {
-    // Récupérer toutes les recettes de la base de données
-    // Inclure l'utilisateur associé à chaque recette
     const recipes = await Recipe.findAll({
       include: [{ model: User, as: 'user' }],
     });
-
-    // Render the 'recipes' view and pass the recipes to the view
     res.render('recipes', { recettes: recipes });
   } catch (error) {
-    // En cas d'erreur, afficher l'erreur et envoyer une réponse d'erreur
     console.error('Error getting recipes:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).render('500', { message: 'Internal server error' });
   }
 }
 

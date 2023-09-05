@@ -2,10 +2,10 @@
 
 <% include partials/header.ejs %>
 <div class="recipes-grid">
-    <% recette.forEach(function(recipe) { %>
+    <% recettes.forEach(function(recipe) { %>
     <div class="recipe-card">
-        <img class="recipe-image" src="<%= recette.image %>" alt="<%= recette.title %>">
-        <h2 class="recipe-title"><%= recette.title %></h2>
+        <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
+        <h2 class="recipe-title"><%= recipe.title %></h2>
         <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
     </div>
     <% }) %>
