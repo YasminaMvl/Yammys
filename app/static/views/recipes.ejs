@@ -1,5 +1,14 @@
-<%- include('layout') %>
+<link rel="stylesheet" href="/css/recipes.css">
 
-<h2><%= recipe.title %></h2>
-<p><strong>Ingredients:</strong> <%= recipe.ingredients %></p>
-<p><strong>Instructions:</strong> <%= recipe.instructions %></p>
+
+
+
+<div class="recipes-grid">
+    <% recipes.forEach(function(recipe) { %>
+    <div class="recipe-card">
+        <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
+        <h2 class="recipe-title"><%= recipe.title %></h2>
+        <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+    </div>
+    <% }) %>
+</div>

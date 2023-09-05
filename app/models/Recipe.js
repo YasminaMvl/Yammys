@@ -20,6 +20,11 @@ const Recipe = sequelize.define('Recipe', {
     instructions: {
         type: DataTypes.TEXT,
         allowNull: false,
+
+    },
+    image: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
 });
 
