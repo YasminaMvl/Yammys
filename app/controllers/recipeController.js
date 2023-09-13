@@ -89,14 +89,20 @@ function renderCreateForm(req, res) {
 async function deleteRecipe(req, res) {
   try {
     const { id } = req.params;
+    const user = req.session.user; // Assumons que l'utilisateur est stocké dans la session
 
-    // Find the recipe by ID
+    // Vérifier si l'utilisateur est un administrateur
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    // Trouver la recette par ID
     const recipe = await Recipe.findByPk(id);
     if (!recipe) {
       return res.status(404).json({ message: 'Recipe not found' });
     }
 
-    // Delete the recipe
+    // Supprimer la recette
     await recipe.destroy();
 
     res.json({ message: 'Recipe deleted successfully' });
@@ -105,6 +111,7 @@ async function deleteRecipe(req, res) {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
 
 module.exports = {
   getAllRecipes,

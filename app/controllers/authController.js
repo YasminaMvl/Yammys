@@ -35,7 +35,7 @@ async function loginUser(req, res) {
     console.log('Starting loginUser function');
     try {
         const { username, password } = req.body;
-        console.log(`Received username: ${username} and password: ${password}`);
+        //console.log(`Received username: ${username} and password: ${password}`);
 
         // Find the user
         console.log('Attempting to find user in database');
@@ -59,8 +59,8 @@ async function loginUser(req, res) {
         console.log('Passwords match, updating session and redirecting to profile');
         req.session.isLoggedIn = true;
         req.session.user = user;
-
         res.redirect('/users/profile');
+
     } catch (error) {
         console.error('Error logging in user:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -98,19 +98,28 @@ async function updateUser(req, res) {
 
 // Hash and store passwords for all users
 async function hashAndStorePasswords() {
-    const users = await User.findAll();
+    try {
+        // Récupérer tous les utilisateurs de la base de données
+        const users = await User.findAll();
 
-    for (let user of users) {
-        const hashedPassword = await bcrypt.hash(user.password, 10);
-        user.password = hashedPassword;
-        await user.save();
+        // Parcourir chaque utilisateur et hacher son mot de passe
+        for (let user of users) {
+            // Hacher le mot de passe
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+
+            // Mettre à jour le mot de passe haché de l'utilisateur dans la base de données
+            user.password = hashedPassword;
+            await user.save();
+        }
+
+        console.log('All passwords have been hashed and stored.');
+    } catch (error) {
+        console.error('Error hashing and storing passwords:', error);
     }
-
-    console.log('All passwords have been hashed and stored.');
 }
 
-// Call the function to hash and store passwords
-hashAndStorePasswords();
+// Appelle la fonction pour hacher et stocker le mdp
+//hashAndStorePasswords();
 
 module.exports = {
     registerUser,
