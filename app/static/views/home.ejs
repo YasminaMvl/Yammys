@@ -1,7 +1,31 @@
 <%- include('partials/header') %>
 
-<h2>Welcome to Recipe Site</h2>
-<p>Explore a collection of delicious recipes.</p>
+
+
+<main>
+    <section class="featured-recipes">
+        <h2>Recettes en Vedette</h2>
+        <% recipes.forEach(function(recipe) { %>
+        <div class="recipe-card">
+            <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
+            <h2 class="recipe-title"><%= recipe.title %></h2>
+            <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+        </div>
+        <% }) %>
+    </section>
+
+    <section class="latest-recipes">
+        <h2>Dernières Recettes</h2>
+        <ul>
+            <% recipes.forEach(function(recipe) { %>
+            <div class="recipe-card">
+                <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
+                <h2 class="recipe-title"><%= recipe.title %></h2>
+                <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+            </div>
+            <% }) %>
+    </section>
+</main>
 
 
 

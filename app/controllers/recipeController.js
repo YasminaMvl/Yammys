@@ -9,7 +9,7 @@ async function getRecipe(req, res) {
     // Récupérer l'ID de la recette à partir de la requête
     const id = parseInt(req.params.id);
 
-    // Vérifier si l'ID est un entier valide
+    // Vérifier si l'ID  de la recette est un entier valide
     if (isNaN(id)) {
       return res.status(400).json({ message: 'Invalid recipe ID' });
     }
@@ -57,6 +57,8 @@ async function getAllRecipes(req, res) {
     res.status(500).render('500', { message: 'Internal server error' });
   }
 }
+//  Fonction pour Recettes aléatoires
+
 
 
 // Créer une nouvelle recette

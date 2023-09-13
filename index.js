@@ -46,7 +46,8 @@ const userRoutes = require('./app/routes/userRoutes');
 
 // Route d'accueil
 app.get('/', (req, res) => {
-    res.render('home', { title: 'Home page!', session: req.session }); //session qui renvoie la page Mon profile apres connexion
+    const recipes = [];
+    res.render('home', { title: 'Home page!', session: req.session, recipes: recipes }); //session qui renvoie la page Mon profile apres connexion
 });
 
 
