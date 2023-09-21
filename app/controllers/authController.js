@@ -96,21 +96,31 @@ async function updateUser(req, res) {
     }
 }
 
-// Hash and store passwords for all users
+/// Hash and store passwords for all users
 async function hashAndStorePasswords() {
     const users = await User.findAll();
+    let alreadyHashedCount = 0;
 
     for (let user of users) {
+        // Check if the password is already hashed
+        if (user.password.length === 60) {
+            alreadyHashedCount++;
+            continue; // Skip to the next iteration
+        }
+
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;
         await user.save();
     }
 
-    console.log('All passwords have been hashed and stored.');
+    console.log(`${alreadyHashedCount} passwords were already hashed.`);
+    console.log('All necessary passwords have been hashed and stored.');
 }
 
 // Call the function to hash and store passwords
 hashAndStorePasswords();
+
+
 
 module.exports = {
     registerUser,
