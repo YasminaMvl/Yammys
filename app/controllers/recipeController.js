@@ -51,7 +51,14 @@ async function getAllRecipes(req, res) {
     const recipes = await Recipe.findAll({
       include: [{ model: User, as: 'user' }],
     });
-    res.render('recipes', { recipes: recipes });
+
+    // Si l'utilisateur est un administrateur, passez la variable admin à la vue
+    if (req.admin && req.admin.isAdmin) {
+      res.render('recipes', { recipes: recipes, admin: true });
+    } else {
+      res.render('recipes', { recipes: recipes, admin: false });
+    }
+
   } catch (error) {
     console.error('Error getting recipes:', error);
     res.status(500).render('500', { message: 'Internal server error' });

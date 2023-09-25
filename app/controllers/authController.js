@@ -32,37 +32,97 @@ async function registerUser(req, res) {
 
 // Login user
 async function loginUser(req, res) {
-    console.log('Starting loginUser function');
+
+
     try {
         const { username, password } = req.body;
-        console.log(`Received username: ${username} and password: ${password}`);
 
         // Find the user
-        console.log('Attempting to find user in database');
-        const user = await User.findOne({ where: { username } });
-        console.log('User:', user);
+        const user = await User.findOne({ where: { username, isAdmin: false } }); // Check if it is a normal user
+        console.log('username:', username);
+        console.log('password:', password);
+        console.log('user found:', user);
         if (!user) {
-            console.log('User not found in database');
             return res.status(401).json({ message: 'Invalid username or password' });
         }
 
         // Compare passwords
-        console.log('User found, comparing passwords');
         const passwordMatch = await bcrypt.compare(password, user.password);
-        console.log('Password match:', passwordMatch);
+
         if (!passwordMatch) {
-            console.log('Passwords do not match');
             return res.status(401).json({ message: 'Invalid username or password' });
         }
 
         // User is logged in, update session
-        console.log('Passwords match, updating session and redirecting to profile');
         req.session.isLoggedIn = true;
         req.session.user = user;
 
         res.redirect('/users/profile');
     } catch (error) {
         console.error('Error logging in user:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+// Fonction pour enregistrer un nouvel admin
+async function registerAdmin(req, res) {
+    try {
+        const { username, password } = req.body;
+
+        // Vérifier si le nom d'utilisateur existe déjà
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(409).json({ message: 'Username already exists' });
+        }
+
+        // Hacher le mot de passe
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Créer un nouvel utilisateur en tant qu'admin
+        const newUser = await User.create({ username, password: hashedPassword, isAdmin: true });
+
+        // Rediriger vers la page de login admin
+        res.redirect('/admin/login');
+    } catch (error) {
+        console.error('Error registering admin:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+
+
+async function loginAdmin(req, res) {
+    console.log('loginAdmin is called'); // Log de débogage
+    try {
+        const { username, password } = req.body;
+
+        // Find the admin user
+        const user = await User.findOne({ where: { username, isAdmin: true } });
+
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid username or password' });
+        }
+
+        // Compare passwords
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Invalid username or password' });
+        }
+
+        // Generate token and set cookie for admin
+        const token = jwt.sign({ id: user.id }, config.secretKey, {
+            expiresIn: 86400, // expires in 24 hours
+        });
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None' });
+
+
+
+        // Redirect to admin profile
+        res.redirect('/admin/adminProfile');
+    } catch (error) {
+        console.error('Error logging in admin:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -96,33 +156,44 @@ async function updateUser(req, res) {
     }
 }
 
-/// Hash and store passwords for all users
+// Hash and store passwords for all users //Try catch pour pas crash le server
 async function hashAndStorePasswords() {
-    const users = await User.findAll();
-    let alreadyHashedCount = 0;
+    try {
+        const users = await User.findAll();
+        let alreadyHashedCount = 0;
 
-    for (let user of users) {
-        // Check if the password is already hashed
-        if (user.password.length === 60) {
-            alreadyHashedCount++;
-            continue; // Skip to the next iteration
+        for (let user of users) {
+            // Check if the password is already hashed
+            if (user.password.length === 60) {
+                alreadyHashedCount++;
+                continue; // Skip to the next iteration
+            }
+
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+            user.password = hashedPassword;
+            await user.save();
         }
 
-        const hashedPassword = await bcrypt.hash(user.password, 10);
-        user.password = hashedPassword;
-        await user.save();
+        console.log(`${alreadyHashedCount} passwords were already hashed.`);
+        console.log('All necessary passwords have been hashed and stored.');
+    } catch (error) {
+        console.error('Error in hashAndStorePasswords:', error);
     }
-
-    console.log(`${alreadyHashedCount} passwords were already hashed.`);
-    console.log('All necessary passwords have been hashed and stored.');
 }
 
 // Call the function to hash and store passwords
-hashAndStorePasswords();
+try {
+    hashAndStorePasswords();
+} catch (error) {
+    console.error('Error calling hashAndStorePasswords:', error);
+}
+
 
 
 
 module.exports = {
+    registerAdmin,
+    loginAdmin,
     registerUser,
     loginUser,
     updateUser,

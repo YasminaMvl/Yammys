@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
+
 // Get user by ID
 async function getUser(req, res) {
     try {
@@ -15,6 +16,29 @@ async function getUser(req, res) {
     } catch (error) {
         console.error('Error getting user:', error);
         res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+// Vérifier si l'utilisateur est un administrateur
+async function isAdmin(req, res) {
+    try {
+        // Rechercher l'utilisateur par son identifiant
+        const foundUser = await User.findOne({
+            where: {
+                id: req.body.userId
+            }
+        });
+
+        if (foundUser) {
+            const userData = {
+                isAdmin: foundUser.dataValues.isAdmin
+            };
+            return res.status(200).json(userData);
+        } else {
+            return res.status(401).json({ errorMessage: "User not found" });
+        }
+    } catch (error) {
+        res.json(error);
     }
 }
 
@@ -67,6 +91,7 @@ async function deleteUser(req, res) {
 
 module.exports = {
     getUser,
+    isAdmin,
     updateUser,
     deleteUser,
 };
