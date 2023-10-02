@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <header>
+     <header>
         <nav class="navbar">
             <h1 class="main_title">Yammy's</h1>
             <ul class="navbar_list">
@@ -26,6 +26,9 @@
                     <ul class="dropdown-content">
                         <li><a href="/admin/login">Login</a></li>
                         <li><a href="/admin/register">Register</a></li>
+                        <% if (typeof admin !== 'undefined' && admin) { %>
+                            <li><a href="/admin/recipes">Admin Recipes</a></li>
+                        <% } %>
                     </ul>
                 </li>
 
@@ -39,10 +42,9 @@
 
                 <li class="navbar_link"><a href="/recipes">Recipes</a></li>
 
-               <% if (typeof session !== 'undefined' && session.isLoggedIn) { %>
+                <% if (typeof session !== 'undefined' && session.isLoggedIn) { %>
                     <li class="navbar_link"><a href="/users/profile">Mon profil</a></li>
                 <% } %>
-
             </ul>
         </nav>
     </header>

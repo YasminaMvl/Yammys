@@ -7,8 +7,8 @@ const authMiddleware = require('../middlewares/authMiddleware');
 router.get('/', recipeController.getAllRecipes); // Récupérer toutes les recettes
 router.post('/', authMiddleware.authenticateUser, recipeController.createRecipe); // Créer une nouvelle recette
 router.get('/:id', recipeController.getRecipe); // Récupérer une recette spécifique
-router.get('/create', recipeController.renderCreateForm); // Afficher le formulaire de création de recette
-router.post('/create', recipeController.createRecipe); // Créer une nouvelle recette
+router.get('/create', authMiddleware.authenticateUser, recipeController.renderCreateForm); // Afficher le formulaire de création de recette
+router.post('/create', authMiddleware.authenticateUser, recipeController.createRecipe); // Créer une nouvelle recette
 router.delete('/:id', authMiddleware.authenticateUser, recipeController.deleteRecipe); // Supprimer une recette
 
 // Exporter le routeur

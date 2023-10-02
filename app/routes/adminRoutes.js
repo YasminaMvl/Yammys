@@ -3,6 +3,11 @@ const router = express.Router();
 const authorizeAdmin = require('../middlewares/authorizeAdmin');
 const authController = require('../controllers/authController');
 const User = require('../models/User'); // ajustez le chemin si nécessaire
+const recipeController = require('../controllers/recipeController'); // ajustez le chemin si nécessaire
+
+
+
+router.get('/recipes', authorizeAdmin, recipeController.getAllRecipes);
 
 
 router.get('/login', (req, res) => {
@@ -20,9 +25,6 @@ router.get('/adminProfile', authorizeAdmin, (req, res) => {
         res.status(500).send('Internal server error');
     }
 });
-
-
-
 
 
 router.get('/register', (req, res) => {

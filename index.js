@@ -1,5 +1,7 @@
 const express = require('express');
+require('./app/config/database');
 require('dotenv').config();
+
 const app = express();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -20,9 +22,21 @@ app.use(express.static(__dirname + '/app/static'));
 // Utilisez cookie-parser
 app.use(cookieParser());
 
-
 // Configuration de la session
-const config = require('./app/config/config');
+const config = require('./app/config/config'); // Déplacez cette ligne ici
+
+// Utilisez express-session avec les options configurées
+app.use(session({
+    secret: config.secretKey,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+        maxAge: 60 * 60 * 1000 // 1 heure
+    }
+}));
+
+
 require('./app/config/database');
 
 
@@ -55,7 +69,7 @@ app.use('/admin', adminRoutes);
 // Route d'accueil
 app.get('/', (req, res) => {
     const recipes = [];
-    res.render('home', { title: 'Home page!', session: req.session, recipes: recipes });
+    res.render('home', { title: 'Home page!', admin: req.admin && req.admin.isAdmin ? true : false, session: req.session, recipes: recipes });
 });
 
 // Démarrage du serveur

@@ -22,11 +22,13 @@ function authorizeAdmin(req, res, next) {
             console.log('Admin found:', admin); // Log the found admin
 
             if (!admin || !admin.isAdmin) {
+
                 console.log('Not an admin user. Redirecting to /admin/login.');
                 return res.status(403).redirect('/admin/login');
             }
 
             req.admin = admin; // Add admin to request object
+            console.log('Admin in middleware:', req.admin); // Log the admin object
             next();
         } catch (error) {
             console.error('Error in authorizeAdmin:', error);
