@@ -34,6 +34,4 @@ router.get('/register', (req, res) => {
 router.post('/register', authController.registerAdmin);
 
 
-
-
 module.exports = router;
