@@ -26,9 +26,8 @@
                     <ul class="dropdown-content">
                         <li><a href="/admin/login">Login</a></li>
                         <li><a href="/admin/register">Register</a></li>
-                        <% if (typeof admin !== 'undefined' && admin) { %>
-                            <li><a href="/admin/recipes">Admin Recipes</a></li>
-                        <% } %>
+                        <li><a href="/admin/recipes">Admin Recipes</a></li>
+                       
                     </ul>
                 </li>
 
@@ -37,10 +36,9 @@
                     <ul class="dropdown-content">
                         <li><a href="/auth/login">Login</a></li>
                         <li><a href="/auth/register">Register</a></li>
+                        <li><a href="/recipes">Recipes</a></li>
                     </ul>
                 </li>
-
-                <li class="navbar_link"><a href="/recipes">Recipes</a></li>
 
                 <% if (typeof session !== 'undefined' && session.isLoggedIn) { %>
                     <li class="navbar_link"><a href="/users/profile">Mon profil</a></li>
