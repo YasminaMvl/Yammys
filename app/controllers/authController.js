@@ -3,73 +3,124 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const config = require('../config/config');
 
-// Register a new user
+// Enregistrement d'un nouvel utilisateur
 async function registerUser(req, res) {
     try {
         const { username, password } = req.body;
 
-        // Check if the username already exists
+        // Vérifier si le nom d'utilisateur existe déjà
         const existingUser = await User.findOne({ where: { username } });
-        console.log('Existing user:', existingUser);
         if (existingUser) {
-            return res.status(409).json({ message: 'Username already exists' });
+            return res.status(409).json({ message: 'Nom d\'utilisateur déjà existant' });
         }
 
-        // Hash the password
+        // Hacher le mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create the new user
+        // Créer le nouvel utilisateur
         const newUser = await User.create({ username, password: hashedPassword });
-        console.log('New user:', newUser);
 
-        // Redirect to login page
+        // Rediriger vers la page de connexion
         res.redirect('/auth/login');
     } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
     }
 }
 
-// Login user
+// Connexion de l'utilisateur
 async function loginUser(req, res) {
-    console.log('Starting loginUser function');
     try {
         const { username, password } = req.body;
-        console.log(`Received username: ${username} and password: ${password}`);
 
-        // Find the user
-        console.log('Attempting to find user in database');
-        const user = await User.findOne({ where: { username } });
-        console.log('User:', user);
+        // Trouver l'utilisateur
+        const user = await User.findOne({ where: { username, isAdmin: false } });
+
         if (!user) {
-            console.log('User not found in database');
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
         }
 
-        // Compare passwords
-        console.log('User found, comparing passwords');
+        // Comparer les mots de passe
         const passwordMatch = await bcrypt.compare(password, user.password);
-        console.log('Password match:', passwordMatch);
+
         if (!passwordMatch) {
-            console.log('Passwords do not match');
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
         }
 
-        // User is logged in, update session
-        console.log('Passwords match, updating session and redirecting to profile');
-        req.session.isLoggedIn = true;
-        req.session.user = user;
+        // L'utilisateur est connecté, générer un jeton
+        const token = jwt.sign({ id: user.id }, config.secretKey, {
+            expiresIn: '1h', // Le jeton expirera en 1 heure
+        });
+        // Définir le jeton en tant que cookie 
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
 
+        // Rediriger vers la page de profil pour ajouter une recette
         res.redirect('/users/profile');
     } catch (error) {
-        console.error('Error logging in user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Erreur lors de la connexion de l\'utilisateur :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
     }
 }
 
+// Fonction pour enregistrer un nouvel admin
+async function registerAdmin(req, res) {
+    try {
+        const { username, password } = req.body;
 
+        // Vérifier si le nom d'utilisateur existe déjà
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(409).json({ message: 'Nom d\'utilisateur déjà existant' });
+        }
 
-// Update user
+        // Hacher le mot de passe
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Créer un nouvel utilisateur en tant qu'admin
+        const newUser = await User.create({ username, password: hashedPassword, isAdmin: true });
+
+        // Rediriger vers la page de connexion admin
+        res.redirect('/admin/login');
+    } catch (error) {
+        console.error('Erreur lors de l\'enregistrement de l\'admin :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// Connexion de l'admin
+async function loginAdmin(req, res) {
+    try {
+        const { username, password } = req.body;
+
+        // Trouver l'admin
+        const user = await User.findOne({ where: { username, isAdmin: true } });
+
+        if (!user) {
+            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
+        }
+
+        // Comparer les mots de passe
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
+        }
+
+        // Générer un jeton et définir un cookie pour l'admin
+        const token = jwt.sign({ id: user.id }, config.secretKey, {
+            expiresIn: 86400, // Le jeton expirera en 24 heures
+        });
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
+
+        // Rediriger vers le profil de l'admin
+        res.redirect('/admin/adminProfile');
+    } catch (error) {
+        console.error('Erreur lors de la connexion de l\'admin :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// Mise à jour de l'utilisateur
 async function updateUser(req, res) {
     try {
         const { id } = req.params;
@@ -78,51 +129,59 @@ async function updateUser(req, res) {
         const user = await User.findByPk(id);
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
         }
 
         user.username = username;
 
-        // Hash the new password before saving it
+        // Hacher le nouveau mot de passe avant de le sauvegarder
         const hashedPassword = await bcrypt.hash(password, 10);
         user.password = hashedPassword;
 
         await user.save();
 
-        res.json({ message: 'User updated successfully', user });
+        res.json({ message: 'Utilisateur mis à jour avec succès', user });
     } catch (error) {
-        console.error('Error updating user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
     }
 }
 
-/// Hash and store passwords for all users
+// Fonction pour hacher et stocker les mots de passe de tous les utilisateurs
 async function hashAndStorePasswords() {
-    const users = await User.findAll();
-    let alreadyHashedCount = 0;
+    try {
+        const users = await User.findAll();
+        let alreadyHashedCount = 0;
 
-    for (let user of users) {
-        // Check if the password is already hashed
-        if (user.password.length === 60) {
-            alreadyHashedCount++;
-            continue; // Skip to the next iteration
+        for (let user of users) {
+            // Vérifier si le mot de passe est déjà haché
+            if (user.password.length === 60) {
+                alreadyHashedCount++;
+                continue; // Passer à l'itération suivante
+            }
+
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+            user.password = hashedPassword;
+            await user.save();
         }
 
-        const hashedPassword = await bcrypt.hash(user.password, 10);
-        user.password = hashedPassword;
-        await user.save();
+        console.log(`${alreadyHashedCount} mots de passe étaient déjà hachés.`);
+        console.log('Tous les mots de passe nécessaires ont été hachés et stockés.');
+    } catch (error) {
+        console.error('Erreur dans hashAndStorePasswords :', error);
     }
-
-    console.log(`${alreadyHashedCount} passwords were already hashed.`);
-    console.log('All necessary passwords have been hashed and stored.');
 }
 
-// Call the function to hash and store passwords
-hashAndStorePasswords();
-
-
+// Appeler la fonction pour hacher et stocker les mots de passe
+try {
+    hashAndStorePasswords();
+} catch (error) {
+    console.error('Erreur lors de l\'appel de hashAndStorePasswords :', error);
+}
 
 module.exports = {
+    registerAdmin,
+    loginAdmin,
     registerUser,
     loginUser,
     updateUser,

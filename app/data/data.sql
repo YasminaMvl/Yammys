@@ -1,7 +1,7 @@
 -- Table "users"
 -- Insérer les enregistrements pour la table "users"
 INSERT INTO users (username, password, is_admin) VALUES
-  ('admin', 'adminpassword', true), -- Utilisateur administrateur
+  ('admin', 'admin123', true), -- Utilisateur administrateur
   ('john123', 'password123', false), -- Utilisateur ordinaire
   ('emma456', 'secret789', false); -- Utilisateur ordinaire
 

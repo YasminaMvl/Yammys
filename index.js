@@ -1,6 +1,9 @@
 const express = require('express');
+require('./app/config/database');
 require('dotenv').config();
+
 const app = express();
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const moment = require('moment');
 
@@ -15,19 +18,27 @@ app.set('views', './app/static/views');
 // Middleware pour les fichiers statiques
 app.use(express.static(__dirname + '/app/static'));
 
-// Configuration de la session
-const config = require('./app/config/config');
-require('./app/config/database');
 
+// Utilisez cookie-parser
+app.use(cookieParser());
+
+// Configuration de la session
+const config = require('./app/config/config'); // Déplacez cette ligne ici
+
+// Utilisez express-session avec les options configurées
 app.use(session({
     secret: config.secretKey,
-    saveUninitialized: true,
-    resave: true,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
         secure: false,
-        maxAge: 60 * 60 * 1000
+        maxAge: 60 * 60 * 1000 // 1 heure
     }
 }));
+
+
+require('./app/config/database');
+
 
 // Middleware personnalisé pour la session
 const middleware = require('./app/config/middleware');
@@ -47,16 +58,18 @@ app.use((req, res, next) => {
 const authRoutes = require('./app/routes/authRoutes');
 const recipeRoutes = require('./app/routes/recipeRoutes');
 const userRoutes = require('./app/routes/userRoutes');
+const adminRoutes = require('./app/routes/adminRoutes');
 
 // Utilisation des routes
 app.use('/auth', authRoutes);
 app.use('/recipes', recipeRoutes);
 app.use('/users', userRoutes);
+app.use('/admin', adminRoutes);
 
 // Route d'accueil
 app.get('/', (req, res) => {
     const recipes = [];
-    res.render('home', { title: 'Home page!', session: req.session, recipes: recipes });
+    res.render('home', { title: 'Home page!', admin: req.admin && req.admin.isAdmin ? true : false, session: req.session, recipes: recipes });
 });
 
 // Démarrage du serveur

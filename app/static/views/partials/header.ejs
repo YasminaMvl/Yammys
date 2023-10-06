@@ -14,25 +14,35 @@
 </head>
 
 <body>
-    <header>
-
+     <header>
         <nav class="navbar">
             <h1 class="main_title">Yammy's</h1>
             <ul class="navbar_list">
-                <li class="navbar_logo">
-
-                </li>
+                <li class="navbar_logo"></li>
                 <li class="navbar_link"><a href="/">Home</a></li>
-                <li class="navbar_link"><a href="/auth/login">Login</a></li>
-                <li class="navbar_link"><a href="/auth/register">Register</a></li>
-                <% if (locals.isLoggedIn) { %>
-                <li class="navbar_link"><a href="/users/profile">Mon profil</a></li>
-                <% } %>
-                <li class="navbar_link"><a href="/recipes">Recipes</a></li>
-                <% if (session.isLoggedIn) { %>
-                <li class="navbar_link"><a href="/users/profile">Mon profil</a></li>
-                <% } %>
 
+                <li class="navbar_link dropdown">
+                    <a href="#">Admin</a>
+                    <ul class="dropdown-content">
+                        <li><a href="/admin/login">Login</a></li>
+                        <li><a href="/admin/register">Register</a></li>
+                        <li><a href="/admin/recipes">Admin Recipes</a></li>
+                       
+                    </ul>
+                </li>
+
+                <li class="navbar_link dropdown">
+                    <a href="#">User</a>
+                    <ul class="dropdown-content">
+                        <li><a href="/auth/login">Login</a></li>
+                        <li><a href="/auth/register">Register</a></li>
+                        <li><a href="/recipes">Recipes</a></li>
+                    </ul>
+                </li>
+
+                <% if (typeof session !== 'undefined' && session.isLoggedIn) { %>
+                    <li class="navbar_link"><a href="/users/profile">Mon profil</a></li>
+                <% } %>
             </ul>
         </nav>
     </header>

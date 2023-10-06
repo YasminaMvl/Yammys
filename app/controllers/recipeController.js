@@ -9,7 +9,7 @@ async function getRecipe(req, res) {
     // Récupérer l'ID de la recette à partir de la requête
     const id = parseInt(req.params.id);
 
-    // Vérifier si l'ID  de la recette est un entier valide
+    // Vérifier si l'ID de la recette est un entier valide
     if (isNaN(id)) {
       return res.status(400).json({ message: 'Invalid recipe ID' });
     }
@@ -51,12 +51,22 @@ async function getAllRecipes(req, res) {
     const recipes = await Recipe.findAll({
       include: [{ model: User, as: 'user' }],
     });
-    res.render('recipes', { recipes: recipes });
+
+    // Définir la variable admin à true si req.admin existe et est un administrateur, sinon à false
+    const admin = req.admin && req.admin.isAdmin ? true : false;
+
+    // Log la variable admin
+    console.log('admin in controller:', admin);
+
+    // Rendre la vue avec les recettes et la variable admin
+    res.render('recipes', { recipes: recipes, admin: admin });
+
   } catch (error) {
     console.error('Error getting recipes:', error);
     res.status(500).render('500', { message: 'Internal server error' });
   }
 }
+
 //  Fonction pour Recettes aléatoires
 
 
