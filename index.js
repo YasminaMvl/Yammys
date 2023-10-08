@@ -41,7 +41,6 @@ app.use(session({
 }));
 
 
-require('./app/config/database');
 
 
 // Middleware personnalisé pour la session
