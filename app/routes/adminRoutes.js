@@ -60,14 +60,28 @@ router.post('/register', authController.registerAdmin);
 router.post('/deleteUser', authorizeAdmin, async (req, res) => {
     try {
         const { userId } = req.body;
-        // Mettez ici le code pour supprimer l'utilisateur avec l'ID `userId`
-        // Redirigez ensuite l'administrateur vers la page du tableau de bord
-        res.redirect('/admin/adminProfile');
+
+        // Utilisez la méthode destroy pour supprimer l'utilisateur de la base de données
+        const result = await User.destroy({
+            where: {
+                id: userId
+            }
+        });
+
+        // Vérifiez le résultat de la suppression
+        if (result === 1) {
+            // L'utilisateur a été supprimé avec succès
+            return res.redirect('/admin/adminProfile');
+        } else {
+            // Aucun utilisateur n'a été supprimé (peut-être que l'ID de l'utilisateur était incorrect)
+            return res.status(400).json({ message: 'User not found' });
+        }
     } catch (error) {
         console.error('Error deleting user:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 // Route pour supprimer une recette (protegée pour les administrateurs)
 router.post('/deleteRecipe', authorizeAdmin, async (req, res) => {

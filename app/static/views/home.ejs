@@ -1,13 +1,14 @@
-<link rel="stylesheet" href="/css/recipes.css">
+<link rel="stylesheet" href="/css/home.css">
 <%- include('partials/header') %>
 
+<div class="recipes-container">
+    <% recipes.forEach(function(recipe) { %>
+        <div class="recipe-card">
+            <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
+            <h2 class="recipe-title"><%= recipe.title %></h2>
+            <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+        </div>
+    <% }) %>
+</div>
 
-
-<% recipes.forEach(function(recipe) { %>
-    <div class="recipe-card">
-        <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
-        <h2 class="recipe-title"><%= recipe.title %></h2>
-        <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
-    </div>
-<% }) %>
 <%- include('partials/footer') %>
