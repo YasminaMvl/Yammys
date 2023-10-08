@@ -1,77 +1,55 @@
-/* Style pour la section "Recettes en Vedette" */
-.featured-recipes {
-    text-align: center;
-    margin-bottom: 30px;
+/* Center the recipes container */
+.recipes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Espace entre les recettes */
+    margin: 20px auto; /* Marge extérieure pour centrer le contenu */
+    max-width: 1200px; /* Largeur maximale du conteneur */
 }
 
-.featured-recipes h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-/* Style pour les cartes de recette en vedette */
+/* Style for individual recipe cards */
 .recipe-card {
-    background-color: white;
+    flex: 0 0 calc(33.33% - 20px); /* Largeur de chaque carte (3 colonnes) */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    margin: 10px;
     padding: 10px;
+    text-align: center;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
 }
 
+.recipe-card:hover {
+    background-color: #fff; /* Couleur de fond au survol */
+}
+
+/* Style for recipe images */
 .recipe-image {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
+    max-width: 100%;
+    height: auto;
     border-radius: 5px;
 }
 
+/* Style for recipe titles */
 .recipe-title {
+    margin: 10px 0;
     font-size: 18px;
-    margin-top: 10px;
 }
 
+/* Style for "Voir la recette" button */
 .recipe-button {
     display: block;
-    background-color: #f06723; /* Couleur orange */
-    color: white;
-    text-align: center;
-    padding: 10px;
-    margin-top: 10px;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
     text-decoration: none;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .recipe-button:hover {
-    background-color: #d94c1c; /* Couleur orange foncé au survol */
-}
-
-/* Style pour la section "Dernières Recettes" */
-.latest-recipes {
-    text-align: center;
-}
-
-.latest-recipes h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-/* Style pour les cartes de recette des dernières recettes */
-.latest-recipes .recipe-card {
-    display: inline-block;
-    vertical-align: top;
-    width: calc(33.33% - 20px);
-}
-
-.latest-recipes .recipe-card:nth-child(3n+1) {
-    margin-left: 0;
-}
-
-.latest-recipes .recipe-card:nth-child(3n+3) {
-    margin-right: 0;
-}
-
-/* Réponse au survol des boutons */
-.recipe-button:hover {
-    background-color: #d94c1c; /* Couleur orange foncé au survol */
+    background-color: #0056b3; /* Couleur au survol */
 }

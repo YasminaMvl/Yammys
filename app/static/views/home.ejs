@@ -1,6 +1,25 @@
 <link rel="stylesheet" href="/css/home.css">
 <%- include('partials/header') %>
+<!-- Formulaire de recherche -->
+<form action="/" method="GET" class="search-form">
+    <input type="text" name="search" placeholder="Rechercher une recette">
+    <button type="submit">Rechercher</button>
+</form>
 
+<!-- Liste des résultats de la recherche -->
+<div class="search-results">
+    <% if (searchResults && searchResults.length > 0) { %>
+        <% searchResults.forEach(function(recipe) { %>
+            <div class="recipe-card">
+                <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
+                <h2 class="recipe-title"><%= recipe.title %></h2>
+                <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>Aucun résultat trouvé.</p>
+    <% } %>
+</div>
 <div class="recipes-container">
     <% recipes.forEach(function(recipe) { %>
         <div class="recipe-card">

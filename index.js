@@ -1,5 +1,7 @@
 const express = require('express');
+const { Sequelize } = require('sequelize');
 const sequelize = require('./app/config/database');
+
 
 require('dotenv').config();
 
@@ -75,24 +77,46 @@ app.use('/admin', adminRoutes);
 // Route d'accueil
 app.get('/', async (req, res) => {
     try {
-        // Récupérer 6 recettes aléatoires depuis la base de données (exemple avec Sequelize)
-        const recipes = await Recipe.findAll({
-            order: sequelize.random(),
-            limit: 6,
-        });
+        // Récupérer le terme de recherche depuis la requête GET
+        const searchTerm = req.query.search;
 
-        // Transmettre les recettes à la vue EJS
+        // Initialiser la variable searchResults à vide
+        let searchResults = [];
+
+        if (searchTerm) {
+            // Si un terme de recherche est fourni, effectuer la recherche dans la base de données
+            searchResults = await Recipe.findAll({
+                where: {
+                    title: {
+                        [Sequelize.Op.iLike]: `%${searchTerm}%` // Recherche insensible à la casse
+                    }
+                }
+            });
+        }
+
+        // Récupérer 6 recettes aléatoires si aucune recherche n'a été effectuée
+        const recipes = searchResults.length === 0
+            ? await Recipe.findAll({
+                order: sequelize.random(),
+                limit: 6,
+            })
+            : [];
+
+        // Transmettre les résultats de la recherche et les recettes aléatoires à la vue EJS
         res.render('home', {
             title: 'Home page!',
             admin: req.admin && req.admin.isAdmin ? true : false,
             session: req.session,
             recipes: recipes,
+            searchResults: searchResults // Ajoutez cette ligne pour transmettre searchResults à la vue
         });
     } catch (error) {
-        console.error('Error retrieving random recipes:', error);
+        console.error('Error retrieving recipes:', error);
         res.status(500).send('Internal server error');
     }
 });
+
+
 
 
 // Démarrage du serveur
