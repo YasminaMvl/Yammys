@@ -1,50 +1,55 @@
 <%- include('partials/header') %>
 
-
-<div class="profile_header_title">
-    <h2>Mon profil ADMIN </h2>
-    <p>Bonjour, <%= user.username %>!</p>
-</div>
-
-<div class="profile_dashboard">
-    <div class="edit_profile">
-        <h2>Modifier Mon Profil</h2>
-        <form action="/users/edit" method="post">
-            <p> Nom d'utilisateur : <%= user.username %></p>
-          
-            <label for="password">Mot de passe </label>
-            <input type="password" id="password" name="password" required>
-            <!-- Ajoutez d'autres champs ici -->
-            <button type="submit"> Mettre à jour </button>
+<div class="dashboard-container">
+    <div class="dashboard-left">
+        <h2>Liste des utilisateurs</h2>
+        <form action="/admin/deleteUser" method="POST">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(function(user) { %>
+                        <tr>
+                            <td><%= user.username %></td>
+                            <td>
+                                <button type="submit" name="userId" value="<%= user.id %>">Supprimer</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
         </form>
-
     </div>
-
-    <div class="add_new_recipe">
-       <h1> Ajoute ta propre recette </h1>
-        <form action="/recipes" method="POST">
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-             <div>
-                <label for="image">Image: </label>
-                <input type="file" id="image" name="image">
-            </div>
-            <div class="form-group">
-                <label for="ingredients">Ingredients:</label>
-                <textarea id="ingredients" name="ingredients" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="instructions">Instructions:</label>
-                <textarea id="instructions" name="instructions" required></textarea>
-            </div>
-            <button type="submit">Ajouter </button>
-</form>
-
+    <div class="dashboard-right">
+        <h2>Liste des recettes</h2>
+        <form action="/admin/deleteRecipe" method="POST">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Recette</th>
+                        <th>Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% recipes.forEach(function(recipe) { %>
+                        <tr>
+                            <td><%= recipe.title %></td>
+                            <td>
+                                <button type="submit" name="recipeId" value="<%= recipe.id %>">Supprimer</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </form>
     </div>
-
+</div>
+<div class="add-recipe-button">
+    <a href="admin/addRecipeForm">Ajouter recette</a>
 </div>
 
 <%- include('partials/footer') %>
-
