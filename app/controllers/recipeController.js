@@ -81,7 +81,7 @@ async function createRecipe(req, res) {
     const newRecipe = await Recipe.create({ title, ingredients, instructions, image });
 
     // Envoyer une réponse indiquant que la recette a été créée avec succès
-    res.status(201).json({ message: 'Recipe created successfully', recipe: newRecipe });
+    res.redirect('/admin/adminProfile');
   } catch (error) {
     // En cas d'erreur, afficher l'erreur et envoyer une réponse d'erreur
     console.error('Error creating recipe:', error);
@@ -109,7 +109,7 @@ async function deleteRecipe(req, res) {
     // Delete the recipe
     await recipe.destroy();
 
-    res.json({ message: 'Recipe deleted successfully' });
+    res.redirect('/admin/adminProfile');
   } catch (error) {
     console.error('Error deleting recipe:', error);
     res.status(500).json({ message: 'Internal server error' });
