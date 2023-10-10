@@ -11,6 +11,7 @@
         <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
         <% if (admin) { %>
             <form action="/recipes/<%= recipe.id %>/delete" method="POST">
+            
                 <button type="submit" class="recipe-button">Supprimer</button>
             </form>
         <% } %>
