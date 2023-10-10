@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="/css/home.css">
 <%- include('partials/header') %>
+
 <!-- Formulaire de recherche -->
 <form action="/" method="GET" class="search-form">
     <input type="text" name="search" placeholder="Rechercher une recette">
@@ -10,23 +11,27 @@
 <div class="search-results">
     <% if (searchResults && searchResults.length > 0) { %>
         <% searchResults.forEach(function(recipe) { %>
-            <div class="recipe-card">
-                <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
-                <h2 class="recipe-title"><%= recipe.title %></h2>
-                <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+            <div class="recipe-container">
+                <div class="recipe-box">
+                    <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
+                    <h2 class="recipe-title"><%= recipe.title %></h2>
+                    <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+                </div>
             </div>
         <% }); %>
     <% } else { %>
-        <p> </p>
+        <p> Aucune recette trouvée. </p>
     <% } %>
 </div>
+
 <div class="recipes-container">
     <% recipes.forEach(function(recipe) { %>
-        <div class="recipe-card">
-<img class="recipe-image" src="/images/<%= recipe.image %>" alt="<%= recipe.title %>">
-
-            <h2 class="recipe-title"><%= recipe.title %></h2>
-            <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+        <div class="recipe-container">
+            <div class="recipe-box">
+                <img class="recipe-image" src="/images/<%= recipe.image %>" alt="<%= recipe.title %>">
+                <h2 class="recipe-title"><%= recipe.title %></h2>
+                <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+            </div>
         </div>
     <% }) %>
 </div>

@@ -15,4 +15,9 @@ router.get('/login', (req, res) => {
 
 router.post('/login', authController.loginUser);
 
+router.get('/logout', (req, res) => {
+    res.clearCookie('token'); // Supprimez le cookie contenant le token JWT
+    res.redirect('/'); // Redirigez vers la page d'accueil après la déconnexion
+});
+
 module.exports = router;

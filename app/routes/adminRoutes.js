@@ -31,6 +31,7 @@ router.get('/adminProfile', authorizeAdmin, async (req, res) => {
             title: 'Admin Profile',
             users: users,
             recipes: recipes,
+
         });
     } catch (error) {
         console.error('Error retrieving admin:', error);

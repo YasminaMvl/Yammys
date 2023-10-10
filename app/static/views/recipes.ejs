@@ -12,7 +12,7 @@
         <% if (admin) { %>
             <form action="/recipes/<%= recipe.id %>/delete" method="POST">
             
-                <button type="submit" class="recipe-button">Supprimer</button>
+                <button type="submit" name="recipeId" value="<%= recipe.id %>">Supprimer</button>
             </form>
         <% } %>
     </div>
