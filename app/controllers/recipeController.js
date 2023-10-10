@@ -2,7 +2,7 @@ const User = require('../models/User');
 const Recipe = require('../models/Recipe');
 
 
-// Récupérer une recette spécifique
+
 // Récupérer une recette spécifique
 async function getRecipe(req, res) {
   try {
@@ -29,10 +29,18 @@ async function getRecipe(req, res) {
     const ingredientsArray = recipe.ingredients.split(',');
 
     // Traiter les instructions en tant que texte brut et les diviser en un tableau
-    const instructionsArray = recipe.instructions.split('\n');
+    // Les instructions seront divisées en un tableau où chaque élément est une instruction, 
+    // et les espaces supplémentaires seront supprimés
+    const instructionsArray = recipe.instructions.split('.').map(instruction => instruction.trim());
+
 
     // Render the 'recipe' view and pass the recipe, ingredientsArray, and instructionsArray to the view
-    res.render('recipe', { recette: recipe, ingredientsArray: ingredientsArray, instructionsArray: instructionsArray });
+    res.render('recipe', {
+      title: 'Recipe Details', // Vous pouvez personnaliser le titre ici
+      recipe: recipe,
+      ingredientsArray: ingredientsArray,
+      instructionsArray: instructionsArray,
+    });
   } catch (error) {
     // En cas d'erreur, afficher l'erreur et envoyer une réponse d'erreur
     console.error('Error getting recipe:', error);
