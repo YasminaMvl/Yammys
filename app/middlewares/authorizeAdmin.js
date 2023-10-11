@@ -28,8 +28,8 @@ function authorizeAdmin(req, res, next) {
             }
 
             req.admin = admin; // Add admin to request object
-            req.session.isAdmin = true;  // <-- Ajoutez cette ligne ici
-            console.log('Admin in middleware:', req.admin); // Log the admin object
+            req.session.isAdmin = true;  // 
+            console.log('Admin in middleware:', req.admin);
             next();
         } catch (error) {
             console.error('Error in authorizeAdmin:', error);
