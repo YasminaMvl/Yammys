@@ -88,8 +88,11 @@ async function createRecipe(req, res) {
     // Créer la nouvelle recette dans la base de données
     const newRecipe = await Recipe.create({ title, ingredients, instructions, image });
 
-    // Envoyer une réponse indiquant que la recette a été créée avec succès
-    res.redirect('/admin/adminProfile');
+    if (req.isAdmin) {
+      return res.redirect('/admin/adminProfile');
+    } else {
+      return res.redirect('/users/profile');
+    }
   } catch (error) {
     // En cas d'erreur, afficher l'erreur et envoyer une réponse d'erreur
     console.error('Error creating recipe:', error);
@@ -98,10 +101,7 @@ async function createRecipe(req, res) {
 }
 
 
-// Render the create recipe form
-function renderCreateForm(req, res) {
-  res.render('create', { title: 'Create Recipe' });
-}
+
 
 // Delete a recipe by ID
 async function deleteRecipe(req, res) {
@@ -129,5 +129,5 @@ module.exports = {
   createRecipe,
   getRecipe,
   deleteRecipe,
-  renderCreateForm,
+
 };

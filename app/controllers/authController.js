@@ -49,7 +49,7 @@ async function loginUser(req, res) {
 
         // L'utilisateur est connecté, générer un jeton
         const token = jwt.sign({ id: user.id }, config.secretKey, {
-            expiresIn: '1h', // Le jeton expirera en 1 heure
+            expiresIn: '365d', // Le jeton expirera en 1 an
         });
         // Définir le jeton en tant que cookie 
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
@@ -108,7 +108,7 @@ async function loginAdmin(req, res) {
 
         // Générer un jeton et définir un cookie pour l'admin
         const token = jwt.sign({ id: user.id }, config.secretKey, {
-            expiresIn: 86400, // Le jeton expirera en 24 heures
+            expiresIn: '365d', // Le jeton expirera en 1 an
         });
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
 

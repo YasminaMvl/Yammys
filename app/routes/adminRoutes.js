@@ -8,7 +8,7 @@ const recipeController = require('../controllers/recipeController'); // ajustez 
 
 
 
-router.get('/recipes', authorizeAdmin, recipeController.getAllRecipes);
+
 
 
 router.get('/login', (req, res) => {
