@@ -179,10 +179,22 @@ try {
     console.error('Erreur lors de l\'appel de hashAndStorePasswords :', error);
 }
 
+const logout = async (req, res) => {
+    try {
+        await req.session.destroy();
+        res.clearCookie('sessionID');  // Remplacez 'sessionID' par le nom du cookie de votre session si différent
+        res.redirect('/');  // Redirige vers la page d'accueil
+    } catch (err) {
+        console.error('Logout failed:', err);
+        res.status(500).json({ message: 'Could not log out, please try again' });
+    }
+};
+
 module.exports = {
     registerAdmin,
     loginAdmin,
     registerUser,
     loginUser,
     updateUser,
+    logout,
 };

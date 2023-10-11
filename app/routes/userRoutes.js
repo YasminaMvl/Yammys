@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
 const authMiddleware = require('../middlewares/authMiddleware'); // Importez le middleware d'authentification
 
 router.get('/profile', authMiddleware.authenticateUser, (req, res) => {
@@ -30,5 +31,9 @@ router.get('/create', authMiddleware.authenticateUser, (req, res) => {
 router.get('/:id', userController.getUser);
 router.put('/:id', userController.updateUser);
 router.delete('/:id', userController.deleteUser);
+
+
+router.get('/logout', authController.logout);
+
 
 module.exports = router;

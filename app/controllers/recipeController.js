@@ -88,7 +88,7 @@ async function createRecipe(req, res) {
     // Créer la nouvelle recette dans la base de données
     const newRecipe = await Recipe.create({ title, ingredients, instructions, image });
 
-    if (req.isAdmin) {
+    if (req.session && req.session.isAdmin) {
       return res.redirect('/admin/adminProfile');
     } else {
       return res.redirect('/users/profile');

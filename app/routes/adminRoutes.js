@@ -110,6 +110,7 @@ router.post('/deleteRecipe', authorizeAdmin, async (req, res) => {
     }
 });
 
+router.get('/logout', authController.logout);
 
 
 module.exports = router;
