@@ -4,7 +4,6 @@ const authorizeAdmin = require('../middlewares/authorizeAdmin');
 const authController = require('../controllers/authController');
 const User = require('../models/User');
 const Recipe = require('../models/Recipe'); // ajustez le chemin si nécessaire
-const recipeController = require('../controllers/recipeController'); // ajustez le chemin si nécessaire
 
 
 

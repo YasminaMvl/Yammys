@@ -54,7 +54,11 @@ async function loginUser(req, res) {
         // Définir le jeton en tant que cookie 
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
 
-        // Rediriger vers la page de profil pour ajouter une recette
+        // Après une connexion réussie
+        req.session.isLoggedIn = true;
+        req.session.userId = user.id;
+
+
         res.redirect('/users/profile');
     } catch (error) {
         console.error('Erreur lors de la connexion de l\'utilisateur :', error);
@@ -112,8 +116,11 @@ async function loginAdmin(req, res) {
         });
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
 
+        req.session.isAdmin = true;
+
         // Rediriger vers le profil de l'admin
         res.redirect('/admin/adminProfile');
+
     } catch (error) {
         console.error('Erreur lors de la connexion de l\'admin :', error);
         res.status(500).json({ message: 'Erreur interne du serveur' });
@@ -180,14 +187,12 @@ try {
 }
 
 const logout = async (req, res) => {
-    try {
-        await req.session.destroy();
-        res.clearCookie('sessionID');  // Remplacez 'sessionID' par le nom du cookie de votre session si différent
-        res.redirect('/');  // Redirige vers la page d'accueil
-    } catch (err) {
-        console.error('Logout failed:', err);
-        res.status(500).json({ message: 'Could not log out, please try again' });
-    }
+    req.session.destroy((err) => {
+        if (err) {
+            return console.log(err);
+        }
+        res.redirect('/');
+    });
 };
 
 module.exports = {
