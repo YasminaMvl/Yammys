@@ -4,11 +4,10 @@ const authorizeAdmin = require('../middlewares/authorizeAdmin');
 const authController = require('../controllers/authController');
 const User = require('../models/User');
 const Recipe = require('../models/Recipe'); // ajustez le chemin si nécessaire
-const recipeController = require('../controllers/recipeController'); // ajustez le chemin si nécessaire
 
 
 
-router.get('/recipes', authorizeAdmin, recipeController.getAllRecipes);
+
 
 
 router.get('/login', (req, res) => {
@@ -110,6 +109,7 @@ router.post('/deleteRecipe', authorizeAdmin, async (req, res) => {
     }
 });
 
+router.get('/logout', authController.logout);
 
 
 module.exports = router;

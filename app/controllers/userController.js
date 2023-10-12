@@ -6,6 +6,12 @@ const bcrypt = require('bcrypt');
 async function getUser(req, res) {
     try {
         const { id } = req.params;
+
+        // Ajout de la validation pour vérifier si l'ID est un entier
+        if (isNaN(id)) {
+            return res.status(400).json({ message: "ID should be an integer" });
+        }
+
         const user = await User.findByPk(id);
 
         if (!user) {
@@ -18,6 +24,7 @@ async function getUser(req, res) {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
 
 // Vérifier si l'utilisateur est un administrateur
 async function isAdmin(req, res) {

@@ -2,23 +2,28 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
 function authenticateUser(req, res, next) {
-    // Vérifier si un token JWT est fourni dans les en-têtes de la requête
+    console.log("Middleware authenticateUser appelé."); // Ajouté pour le débogage
     const token = req.cookies.token;
 
     if (!token) {
-        console.log('Aucun token fourni.');
+        console.log('Aucun token fourni.');  // Ajouté pour le débogage
         return res.status(401).json({ message: 'No token provided' });
     }
 
     jwt.verify(token, config.secretKey, (err, decoded) => {
         if (err) {
-            console.log('Token invalide :', err);
+            console.log("Erreur lors de la vérification du token:", err);  // Ajouté pour le débogage
+
+            if (err.name === 'TokenExpiredError') {
+                console.log("Le token a expiré.");  // Ajouté pour le débogage
+                return res.status(401).json({ message: 'Token expired' });
+            }
+
             return res.status(401).json({ message: 'Invalid token' });
         }
 
-        // Le token est valide, vous pouvez stocker les informations de l'utilisateur dans req.user
         req.user = decoded;
-        console.log('Utilisateur authentifié :', req.user);
+        console.log('Utilisateur authentifié :', req.user);  // Ajouté pour le débogage
         next();
     });
 }

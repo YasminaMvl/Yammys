@@ -49,12 +49,16 @@ async function loginUser(req, res) {
 
         // L'utilisateur est connecté, générer un jeton
         const token = jwt.sign({ id: user.id }, config.secretKey, {
-            expiresIn: '1h', // Le jeton expirera en 1 heure
+            expiresIn: '365d', // Le jeton expirera en 1 an
         });
         // Définir le jeton en tant que cookie 
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
 
-        // Rediriger vers la page de profil pour ajouter une recette
+        // Après une connexion réussie
+        req.session.isLoggedIn = true;
+        req.session.userId = user.id;
+
+
         res.redirect('/users/profile');
     } catch (error) {
         console.error('Erreur lors de la connexion de l\'utilisateur :', error);
@@ -108,12 +112,15 @@ async function loginAdmin(req, res) {
 
         // Générer un jeton et définir un cookie pour l'admin
         const token = jwt.sign({ id: user.id }, config.secretKey, {
-            expiresIn: 86400, // Le jeton expirera en 24 heures
+            expiresIn: '365d', // Le jeton expirera en 1 an
         });
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
 
+        req.session.isAdmin = true;
+
         // Rediriger vers le profil de l'admin
         res.redirect('/admin/adminProfile');
+
     } catch (error) {
         console.error('Erreur lors de la connexion de l\'admin :', error);
         res.status(500).json({ message: 'Erreur interne du serveur' });
@@ -179,10 +186,20 @@ try {
     console.error('Erreur lors de l\'appel de hashAndStorePasswords :', error);
 }
 
+const logout = async (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return console.log(err);
+        }
+        res.redirect('/');
+    });
+};
+
 module.exports = {
     registerAdmin,
     loginAdmin,
     registerUser,
     loginUser,
     updateUser,
+    logout,
 };
