@@ -67,6 +67,13 @@ const recipeRoutes = require('./app/routes/recipeRoutes');
 const userRoutes = require('./app/routes/userRoutes');
 const adminRoutes = require('./app/routes/adminRoutes');
 
+
+//Utiliser locals pour recupérer la session de l'user/admin dans le header
+app.use((req, res, next) => {
+    res.locals.session = req.session;
+    next();
+});
+
 // Utilisation des routes
 app.use('/auth', authRoutes);
 app.use('/recipes', recipeRoutes);
