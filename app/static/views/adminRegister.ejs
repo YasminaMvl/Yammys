@@ -1,9 +1,18 @@
+<link rel="stylesheet" href="/css/register.css">
+<%- include('partials/header') %>
+
+<h2 class="register-title">ADD ADMIN ONLY</h2> 
+
 <form action="/admin/register" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    
-    <button type="submit">Register</button>
+    <div class="form">
+    <div class="input">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div class="input">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <button class="register-button" type="submit">Register</button>
+</div>
 </form>

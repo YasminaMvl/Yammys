@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
 function authenticateUser(req, res, next) {
+
+
     console.log("Middleware authenticateUser appelé."); // Ajouté pour le débogage
     const token = req.cookies.token;
 

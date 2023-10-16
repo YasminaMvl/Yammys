@@ -12,7 +12,7 @@ router.get('/profile', authMiddleware.authenticateUser, (req, res) => {
         return res.status(401).json({ message: 'No user found' });
     }
 
-    res.render('profile', { title: 'Mon profil', user }); // Passez l'objet user au modèle EJS
+    res.render('profile', { user: req.user });
 });
 
 // Route pour afficher le formulaire d'ajout de recette
