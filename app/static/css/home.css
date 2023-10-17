@@ -1,17 +1,13 @@
-/* ... [les autres styles précédents non modifiés ici] ... */
-
-/* Center the recipes container */
-.recipes-container {
+.search-form {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: start; /* Alignement des éléments au début pour une meilleure organisation */
-    gap: 20px; 
-    margin: 40px auto;
-    max-width: 80%;
+    margin-left: 30px;
+    margin-top: 10px;
 }
 
-/* Style for individual recipe containers */
+.search-form button{
+    color: rgb(167, 62, 30);
+}
+
 .recipe-container {
     flex: 0 0 calc(50% - 20px); 
     box-sizing: border-box;
@@ -22,20 +18,13 @@
     align-items: center;
 }
 
-/* Nouveau style pour la mise en page des cartes */
+
 .recipe-container::before, .recipe-container::after {
     content: "";
     background-color: #fab5704c;
     position: absolute;
 }
 
-.recipe-container::before {
-    border-radius: 50%;
-    width: 6rem;
-    height: 6rem;
-    top: 30%;
-    right: 7%;
-}
 
 .recipe-container::after {
     content: "";
@@ -48,13 +37,8 @@
 
 .recipe-box {
     width: 11.875em;
-    height: 15.875em;
-    padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.074);
-    border: 1px solid rgba(255, 255, 255, 0.222);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    border-radius: .7rem;
+    background-color:#d1d9e282;
+    border-radius: 0.7rem;
     transition: all ease .3s;
     display: flex;
     flex-direction: column;
@@ -62,7 +46,8 @@
     align-items: center;
     text-align: center;
     position: relative;
-}
+
+    margin-top: 10px;
 
 .recipe-box:hover {
     box-shadow: 0px 0px 20px 1px #ffbb763f;
@@ -78,24 +63,25 @@
 }
 
 .recipe-title {
-    font-size: 1.5rem; /* réduire légèrement la taille pour un meilleur ajustement */
-    font-weight: 500;
-    letter-spacing: .1em;
+    color: rgb(25, 1, 1);
+    margin-bottom: 5px;
+    transition: background-color 0.3s ease 0s;
 }
 
 
 .recipe-button {
     position: absolute;
-    top: 5%;
+    top: 50%;
     padding: 5px 15px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: #d1d9e282;
+    color: #190101;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 2px;
     transition: background-color 0.3s ease;
+    z-index: 1;
 }
 
 .recipe-button:hover {
-    background-color: #0056b3;
+    background-color: #b33900;
 }
 

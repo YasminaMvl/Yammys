@@ -11,38 +11,39 @@
     <link type="text/css" rel="stylesheet" href="/css/reset.css" />
     <link type="text/css" rel="stylesheet" href="/css/header.css" />
     
-    <title>Recipe Site</title>
+    <title>Yammy's</title>
 </head>
 
 <body>
      <header>
         <nav class="navbar">
             <h1 class="main_title">Yammy's</h1>
+            <img src="../../images/logo.png" alt="Logo de Yammy's" class="navbar_logo">
             <ul class="navbar_list">
-                <li class="navbar_logo"></li>
+                <li class="navbar_logo">
+                     
+                </li>
                 <li class="navbar_link"><a href="/">Home</a></li>
+                <li class="navbar_link"><a href="/recipes">Recipes</a></li>
 
                 <li class="navbar_link dropdown">
                     <a href="#">Admin</a>
                     <ul class="dropdown-content">
                         <li><a href="/admin/login">Login</a></li>
                         <li><a href="/admin/register">Register</a></li>
-                        <li><a href="/admin/recipes">Admin Recipes</a></li>
+                        
 
-                        <% if (typeof session !== 'undefined') { %>
-  <p>Session is available</p>
-<% } else { %>
-  <p>Session is NOT available</p>
-<% } %>
+ <!--                   <% if (typeof session !== 'undefined') { %>
+                    <p>Session is available</p>
+             <% } else { %>
+                    <p>Session is NOT available</p>
+                <% } %>
+-->
 
                 <% if (typeof session !== 'undefined' && session.isAdmin) { %>
                         <li><a href="/admin/adminProfile">Profil Admin</a></li>
-                <% } %>
-
-                <% if (typeof session !== 'undefined' && (session.isAdmin || session.isLoggedIn)) { %>
                         <li><a href="/auth/logout">Déconnexion</a></li>
                 <% } %>
-
                     </ul>
                 </li>
 
@@ -52,13 +53,14 @@
                         <li><a href="/auth/login">Login</a></li>
                         <li><a href="/auth/register">Register</a></li>
                         <li><a href="/recipes">Recipes</a></li>
+                    <% if (typeof session !== 'undefined' && session.isLoggedIn) { %>
+                        <li class="navbar_link"><a href="/users/profile">Mon profil</a></li>
+                        <li><a  href="/auth/logout">Déconnexion</a></li>
+                    <% } %>
                     </ul>
                 </li>
 
-                <% if (typeof session !== 'undefined' && session.isLoggedIn) { %>
-                    <li class="navbar_link"><a href="/users/profile">Mon profil</a></li>
-                <li><a  href="/auth/logout">Déconnexion</a></li>
-                    <% } %>
+                
             </ul>
         </nav>
     </header>

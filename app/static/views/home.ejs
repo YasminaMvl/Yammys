@@ -3,8 +3,10 @@
 
 <!-- Formulaire de recherche -->
 <form action="/" method="GET" class="search-form">
+    <div class="search-form">
     <input type="text" name="search" placeholder="Rechercher une recette">
     <button type="submit">Rechercher</button>
+    </div>
 </form>
 
 <!-- Liste des résultats de la recherche -->
@@ -20,7 +22,7 @@
             </div>
         <% }); %>
     <% } else { %>
-        <p> Aucune recette trouvée. </p>
+        <p> </p>
     <% } %>
 </div>
 
