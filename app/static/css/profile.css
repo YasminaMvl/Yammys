@@ -1,8 +1,8 @@
 /* Base colors */
 :root {
-  --main-color: rgb(199, 46, 0);
-  --dark-color: rgb(23, 23, 22);
-  --light-color: rgb(252, 252, 247);
+  --main-color: rgba(199, 46, 0, 0.199);
+  --dark-color: rgba(23, 23, 22, 0.925);
+  --light-color: rgb(245, 245, 245);
 }
 
 /* Profile Header Title */
