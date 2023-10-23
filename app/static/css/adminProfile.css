@@ -1,0 +1,90 @@
+/* Couleurs */
+:root {
+    --primary-color: rgba(199, 46, 0, 0.377);
+    --secondary-color: rgb(36, 36, 31);
+    --background-color: rgb(252, 252, 247);
+}
+
+/* Configuration globale */
+body {
+    background-color: var(--background-color);
+    font-family: Arial, sans-serif;
+}
+
+.dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.dashboard-left,
+.dashboard-right {
+    flex: 1;
+    margin: 10px;
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Tableau */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid var(--background-color);
+    text-align: left;
+    padding: 10px;
+}
+
+thead {
+   text-align: center;
+   font-size: 1.5rem;
+    color: var(--background-color);
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+}
+
+tbody tr:nth-child(odd) {
+   
+    color: var(--background-color);
+}
+
+/* Bouton pour supprimer */
+button {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+}
+
+/* Bouton d'ajout de recette */
+.add-recipe-button {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.add-recipe-button a {
+    background-color: rgb(22, 21, 21);
+    color: var(--background-color);
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.add-recipe-button a:hover {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+}

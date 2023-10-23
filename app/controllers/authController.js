@@ -3,61 +3,204 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const config = require('../config/config');
 
-// Register a new user
+// Enregistrement d'un nouvel utilisateur
 async function registerUser(req, res) {
     try {
         const { username, password } = req.body;
 
-        // Check if the username already exists
+        // Vérifier si le nom d'utilisateur existe déjà
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
-            return res.status(409).json({ message: 'Username already exists' });
+            return res.status(409).json({ message: 'Nom d\'utilisateur déjà existant' });
         }
 
-        // Hash the password
+        // Hacher le mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create the new user
+        // Créer le nouvel utilisateur
         const newUser = await User.create({ username, password: hashedPassword });
 
-        // Generate JWT token
-        const token = jwt.sign({ id: newUser.id }, config.secretKey);
-
-        res.status(201).json({ message: 'User registered successfully', token });
+        // Rediriger vers la page de connexion
+        res.redirect('/auth/login');
     } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
     }
 }
 
-// Login user
+// Connexion de l'utilisateur
 async function loginUser(req, res) {
     try {
         const { username, password } = req.body;
 
-        // Find the user
-        const user = await User.findOne({ where: { username } });
+        // Trouver l'utilisateur
+        const user = await User.findOne({ where: { username, isAdmin: false } });
+
         if (!user) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
         }
 
-        // Compare passwords
+        // Comparer les mots de passe
         const passwordMatch = await bcrypt.compare(password, user.password);
+
         if (!passwordMatch) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
         }
 
-        // Generate JWT token
-        const token = jwt.sign({ id: user.id }, config.secretKey);
+        // L'utilisateur est connecté, générer un jeton
+        const token = jwt.sign({ id: user.id }, config.secretKey, {
+            expiresIn: '365d', // Le jeton expirera en 1 an
+        });
+        // Définir le jeton en tant que cookie 
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
 
-        res.json({ message: 'User logged in successfully', token });
+        // Après une connexion réussie
+        req.session.isLoggedIn = true;
+        req.session.userId = user.id;
+
+
+        res.redirect('/users/profile');
     } catch (error) {
-        console.error('Error logging in user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Erreur lors de la connexion de l\'utilisateur :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
     }
 }
 
+// Fonction pour enregistrer un nouvel admin
+async function registerAdmin(req, res) {
+    try {
+        const { username, password } = req.body;
+
+        // Vérifier si le nom d'utilisateur existe déjà
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(409).json({ message: 'Nom d\'utilisateur déjà existant' });
+        }
+
+        // Hacher le mot de passe
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Créer un nouvel utilisateur en tant qu'admin
+        const newUser = await User.create({ username, password: hashedPassword, isAdmin: true }); // On défini cet user comme ADMIN
+
+        // Rediriger vers la page de connexion admin
+        res.redirect('/admin/login');
+    } catch (error) {
+        console.error('Erreur lors de l\'enregistrement de l\'admin :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// Connexion de l'admin
+async function loginAdmin(req, res) {
+    try {
+        const { username, password } = req.body;
+
+        // Trouver l'admin
+        const user = await User.findOne({ where: { username, isAdmin: true } });
+
+        if (!user) {
+            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
+        }
+
+        // Comparer les mots de passe
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
+        }
+
+        // Générer un jeton et définir un cookie pour l'admin
+        const token = jwt.sign({ id: user.id }, config.secretKey, {
+            expiresIn: '365d', // Le jeton expirera en 1 an
+        });
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
+
+        req.session.isAdmin = true;
+
+        // Rediriger vers le profil de l'admin
+        res.redirect('/admin/adminProfile');
+
+    } catch (error) {
+        console.error('Erreur lors de la connexion de l\'admin :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// Mise à jour de l'utilisateur
+async function updateUser(req, res) {
+    try {
+        const { id } = req.params;
+        const { username, password } = req.body;
+
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+
+        user.username = username;
+
+        // Hacher le nouveau mot de passe avant de le sauvegarder
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+
+        await user.save();
+
+        res.json({ message: 'Utilisateur mis à jour avec succès', user });
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// Fonction pour hacher et stocker les mots de passe de tous les utilisateurs
+async function hashAndStorePasswords() {
+    try {
+        const users = await User.findAll();
+        let alreadyHashedCount = 0;
+
+        for (let user of users) {
+            // Vérifier si le mot de passe est déjà haché
+            if (user.password.length === 60) {
+                alreadyHashedCount++;
+                continue; // Passer à l'itération suivante
+            }
+
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+            user.password = hashedPassword;
+            await user.save();
+        }
+
+        console.log(`${alreadyHashedCount} mots de passe étaient déjà hachés.`);
+        // console.log('Tous les mots de passe nécessaires ont été hachés et stockés.');
+    } catch (error) {
+        console.error('Erreur dans hashAndStorePasswords :', error);
+    }
+}
+
+// Appeler la fonction pour hacher et stocker les mots de passe
+//try catch pour arreter la boucle 
+try {
+    hashAndStorePasswords();
+} catch (error) {
+    console.error('Erreur lors de l\'appel de hashAndStorePasswords :', error);
+}
+
+const logout = async (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return console.log(err);
+        }
+        res.redirect('/');
+    });
+};
+
 module.exports = {
+    registerAdmin,
+    loginAdmin,
     registerUser,
     loginUser,
+    updateUser,
+    logout,
 };

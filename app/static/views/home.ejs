@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="/css/home.css">
+<%- include('partials/header') %>
+
+<!-- Formulaire de recherche -->
+<form action="/" method="GET" class="search-form">
+    <div class="search-form">
+    <input type="text" name="search" placeholder="Rechercher une recette">
+    <button type="submit">Rechercher</button>
+    </div>
+</form>
+
+<!-- Liste des résultats de la recherche -->
+<div class="search-results">
+    <% if (searchResults && searchResults.length > 0) { %>
+        <% searchResults.forEach(function(recipe) { %>
+            <div class="recipe-container">
+                <div class="recipe-box">
+                    <img class="recipe-image" src="<%= recipe.image %>" alt="<%= recipe.title %>">
+                    <h2 class="recipe-title"><%= recipe.title %></h2>
+                    <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+                </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p> </p>
+    <% } %>
+</div>
+
+<div class="recipes-container">
+    <% recipes.forEach(function(recipe) { %>
+        <div class="recipe-container">
+            <div class="recipe-box">
+                <img class="recipe-image" src="/images/<%= recipe.image %>" alt="<%= recipe.title %>">
+                <h2 class="recipe-title"><%= recipe.title %></h2>
+                <a href="/recipes/<%= recipe.id %>" class="recipe-button">Voir la recette</a>
+            </div>
+        </div>
+    <% }) %>
+</div>
+
+<%- include('partials/footer') %>

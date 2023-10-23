@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 
+// Routes pour les utilisateurs
 router.get('/register', (req, res) => {
     res.render('register', { title: 'Register' });
 });
@@ -14,4 +15,5 @@ router.get('/login', (req, res) => {
 
 router.post('/login', authController.loginUser);
 
+router.get('/logout', authController.logout)
 module.exports = router;

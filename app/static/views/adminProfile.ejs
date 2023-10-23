@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="/css/adminProfile.css">
+
+<%- include('partials/header') %>
+
+<div class="add-recipe-button">
+    <a href="admin/addRecipeForm">Ajouter recette</a>
+</div>
+
+<div class="dashboard-container">
+    <div class="dashboard-left">
+        <h2>Liste des utilisateurs</h2>
+        <form action="/admin/deleteUser" method="POST">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(function(user) { %>
+                        <tr>
+                            <td><%= user.username %></td>
+                            <td>
+                                <button type="submit" name="userId" value="<%= user.id %>">Supprimer</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="dashboard-right">
+        <h2>Liste des recettes</h2>
+        <form action="/admin/deleteRecipe" method="POST">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Recette</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <% recipes.forEach(function(recipe) { %>
+                        <tr>
+                            <td><%= recipe.title %></td>
+                            <td>
+                                <button type="submit" name="recipeId" value="<%= recipe.id %>">Supprimer</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+
+<%- include('partials/footer') %>

@@ -1,9 +1,17 @@
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
+
 
 // Get user by ID
 async function getUser(req, res) {
     try {
         const { id } = req.params;
+
+        // Ajout de la validation pour vérifier si l'ID est un entier
+        if (isNaN(id)) {
+            return res.status(400).json({ message: "ID should be an integer" });
+        }
+
         const user = await User.findByPk(id);
 
         if (!user) {
@@ -14,6 +22,30 @@ async function getUser(req, res) {
     } catch (error) {
         console.error('Error getting user:', error);
         res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+// Vérifier si l'utilisateur est un administrateur
+async function isAdmin(req, res) {
+    try {
+        // Rechercher l'utilisateur par son identifiant
+        const foundUser = await User.findOne({
+            where: {
+                id: req.body.userId
+            }
+        });
+ // Récupération de la valeur isAdmin depuis les données de l'utilisateur
+        if (foundUser) {
+            const userData = {
+                isAdmin: foundUser.dataValues.isAdmin
+            };
+            return res.status(200).json(userData);
+        } else {
+            return res.status(401).json({ errorMessage: "User not found" });
+        }
+    } catch (error) {
+        res.json(error);
     }
 }
 
@@ -30,7 +62,11 @@ async function updateUser(req, res) {
         }
 
         user.username = username;
-        user.password = password;
+
+        // Hasher le mot de passe
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+
         await user.save();
 
         res.json({ message: 'User updated successfully', user });
@@ -62,6 +98,7 @@ async function deleteUser(req, res) {
 
 module.exports = {
     getUser,
+    isAdmin,
     updateUser,
     deleteUser,
 };
