@@ -81,7 +81,7 @@ async function registerAdmin(req, res) {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Créer un nouvel utilisateur en tant qu'admin
-        const newUser = await User.create({ username, password: hashedPassword, isAdmin: true });
+        const newUser = await User.create({ username, password: hashedPassword, isAdmin: true }); // On défini cet user comme ADMIN
 
         // Rediriger vers la page de connexion admin
         res.redirect('/admin/login');
@@ -173,13 +173,14 @@ async function hashAndStorePasswords() {
         }
 
         console.log(`${alreadyHashedCount} mots de passe étaient déjà hachés.`);
-        console.log('Tous les mots de passe nécessaires ont été hachés et stockés.');
+        // console.log('Tous les mots de passe nécessaires ont été hachés et stockés.');
     } catch (error) {
         console.error('Erreur dans hashAndStorePasswords :', error);
     }
 }
 
 // Appeler la fonction pour hacher et stocker les mots de passe
+//try catch pour arreter la boucle 
 try {
     hashAndStorePasswords();
 } catch (error) {

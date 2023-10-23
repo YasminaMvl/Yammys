@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
-const authMiddleware = require('../middlewares/authMiddleware'); // Importez le middleware d'authentification
+const authMiddleware = require('../middlewares/authMiddleware');
 
 router.get('/profile', authMiddleware.authenticateUser, (req, res) => {
-    // Récupérez les informations de l'utilisateur authentifié depuis la session ou d'où elles proviennent
-    const user = req.user; // Assurez-vous que req.user est correctement défini
+    // Récupére les informations de l'utilisateur authentifié depuis la session ou d'où elles proviennent
+    const user = req.user;
 
     if (!user) {
         return res.status(401).json({ message: 'No user found' });

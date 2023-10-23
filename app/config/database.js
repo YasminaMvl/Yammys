@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 
 require('dotenv').config();
 
-//connexion à la BDD
+//connection database 
 
 const sequelize = new Sequelize(process.env.PG_URL, {
 
@@ -13,7 +13,7 @@ const sequelize = new Sequelize(process.env.PG_URL, {
 
 });
 
-// Test the database connection
+// Test connection database 
 (async () => {
     try {
         await sequelize.authenticate();

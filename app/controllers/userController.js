@@ -35,7 +35,7 @@ async function isAdmin(req, res) {
                 id: req.body.userId
             }
         });
-
+ // Récupération de la valeur isAdmin depuis les données de l'utilisateur
         if (foundUser) {
             const userData = {
                 isAdmin: foundUser.dataValues.isAdmin
@@ -63,7 +63,7 @@ async function updateUser(req, res) {
 
         user.username = username;
 
-        // Hash the new password before saving it
+        // Hasher le mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
         user.password = hashedPassword;
 

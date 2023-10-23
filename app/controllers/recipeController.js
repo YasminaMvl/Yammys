@@ -34,9 +34,9 @@ async function getRecipe(req, res) {
     const instructionsArray = recipe.instructions.split('.').map(instruction => instruction.trim());
 
 
-    // Render the 'recipe' view and pass the recipe, ingredientsArray, and instructionsArray to the view
+    // Render 'recipe' view et passe la recette, ingredientsArrayet instructionsArray a la view
     res.render('recipe', {
-      title: 'Recipe Details', // Vous pouvez personnaliser le titre ici
+      title: 'Recipe Details',
       recipe: recipe,
       ingredientsArray: ingredientsArray,
       instructionsArray: instructionsArray,
@@ -75,7 +75,6 @@ async function getAllRecipes(req, res) {
   }
 }
 
-//  Fonction pour Recettes aléatoires
 
 
 
@@ -103,12 +102,11 @@ async function createRecipe(req, res) {
 
 
 
-// Delete a recipe by ID
+// Supprimer la recette par ID
 async function deleteRecipe(req, res) {
   try {
     const { id } = req.params;
 
-    // Find the recipe by ID
     const recipe = await Recipe.findByPk(id);
     if (!recipe) {
       return res.status(404).json({ message: 'Recipe not found' });

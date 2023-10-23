@@ -114,7 +114,7 @@ app.get('/', async (req, res) => {
             admin: req.admin && req.admin.isAdmin ? true : false,
             session: req.session,
             recipes: recipes,
-            searchResults: searchResults // Ajoutez cette ligne pour transmettre searchResults à la vue
+            searchResults: searchResults
         });
     } catch (error) {
         console.error('Error retrieving recipes:', error);

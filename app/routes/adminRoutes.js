@@ -88,14 +88,14 @@ router.post('/deleteRecipe', authorizeAdmin, async (req, res) => {
     try {
         const { recipeId } = req.body;
 
-        // Utilisez la méthode destroy pour supprimer la recette de la base de données
+        // Utilise la méthode destroy pour supprimer la recette de la base de données
         const result = await Recipe.destroy({
             where: {
                 id: recipeId
             }
         });
 
-        // Vérifiez le résultat de la suppression
+        // Vérifie le résultat de la suppression
         if (result === 1) {
             // La recette a été supprimée avec succès
             return res.redirect('/admin/adminProfile');

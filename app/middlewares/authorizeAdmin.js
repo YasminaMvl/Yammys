@@ -5,7 +5,7 @@ const session = require('express-session');
 
 function authorizeAdmin(req, res, next) {
     const token = req.cookies ? req.cookies.token : null;
-    console.log("Token received in middleware:", token); // log the token
+    console.log("Token received in middleware:", token); // log le token
 
     if (!token) {
         console.log("No token found. Redirecting to /admin/login.");
@@ -20,15 +20,16 @@ function authorizeAdmin(req, res, next) {
 
         try {
             const admin = await User.findByPk(decoded.id);
-            console.log('Admin found:', admin); // Log the found admin
+            console.log('Admin found:', admin); // Log l' admin
 
             if (!admin || !admin.isAdmin) {
                 console.log('Not an admin user. Redirecting to /admin/login.');
                 return res.status(403).redirect('/admin/login');
             }
 
-            req.admin = admin; // Add admin to request object
-            req.session.isAdmin = true;  // 
+            req.admin = admin;
+            req.session.isAdmin = true;
+            // 
             console.log('Admin in middleware:', req.admin);
             next();
         } catch (error) {

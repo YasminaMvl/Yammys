@@ -1,6 +1,6 @@
 .search-form {
     display: flex;
-    margin-left: 30px;
+    margin-left: 80px;
     margin-top: 10px;
 }
 
@@ -85,3 +85,28 @@
     background-color: #b33900;
 }
 
+/* Media Query pour tablettes */
+@media (min-width: 768px) {
+  .recipes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .recipe-container {
+    flex: 0 0 calc(33.3333% - 20px); /* 3 colonnes */
+    margin-bottom: 20px;
+  }
+}
+
+/* Media Query pour grands écrans */
+@media (min-width: 1200px) {
+  .recipes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .recipe-container {
+    flex: 0 0 calc(33.3333% - 20px); /* 3 colonnes */
+    margin-bottom: 20px;
+  }
+}
