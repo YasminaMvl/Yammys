@@ -1,6 +1,10 @@
+body {
+  background: #ebe7e2;
+}
+
 .search-form {
     display: flex;
-    margin-left: 80px;
+    margin-left: 100px;
     margin-top: 10px;
 }
 
@@ -8,36 +12,18 @@
     color: rgb(167, 62, 30);
 }
 
-.recipe-container {
-    flex: 0 0 calc(50% - 20px); 
-    box-sizing: border-box;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+.recipes-container {
+   
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
 }
 
 
-.recipe-container::before, .recipe-container::after {
-    content: "";
-    background-color: #fab5704c;
-    position: absolute;
-}
-
-
-.recipe-container::after {
-    content: "";
-    position: absolute;
-    height: 3rem;
-    top: 8%;
-    right: 5%;
-    border: 1px solid;
-}
 
 .recipe-box {
-    width: 11.875em;
-    background-color:#d1d9e282;
+    width: 9.875em;
+    background-color:#d7daddc5;
     border-radius: 0.7rem;
     transition: all ease .3s;
     display: flex;
@@ -56,9 +42,9 @@
 
 .recipe-image {
     width: 100%;
-    height: 25%; /* l'image prend un quart de la hauteur de la carte */
-    object-fit: cover; /* assure que l'image couvre l'espace dédié sans distorsion */
-    border-radius: 5px 5px 0 0; /* coins arrondis seulement en haut */
+    height: 25%; 
+    object-fit: cover; 
+    border-radius: 5px 5px 0 0; 
     margin-bottom: 10px;
 }
 
@@ -85,28 +71,4 @@
     background-color: #b33900;
 }
 
-/* Media Query pour tablettes */
-@media (min-width: 768px) {
-  .recipes-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  .recipe-container {
-    flex: 0 0 calc(33.3333% - 20px); /* 3 colonnes */
-    margin-bottom: 20px;
-  }
-}
 
-/* Media Query pour grands écrans */
-@media (min-width: 1200px) {
-  .recipes-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  .recipe-container {
-    flex: 0 0 calc(33.3333% - 20px); /* 3 colonnes */
-    margin-bottom: 20px;
-  }
-}

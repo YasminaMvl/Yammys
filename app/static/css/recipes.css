@@ -1,5 +1,9 @@
 /* recipes.css */
-
+.recipes-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+}
 /* Style pour les cartes de recette */
 .recipe-card {
     background-color: white;
